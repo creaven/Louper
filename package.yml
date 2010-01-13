@@ -1,0 +1,26 @@
+name: Looper
+ 
+web: [http://github.com/creaven/Looper/](http://github.com/creaven/Looper/)
+ 
+description: zoom image using real loop
+ 
+authors: [Anton Samoylov](http://mifjs.net.net)
+ 
+license: MIT License
+ 
+copyright: &copy; [Anton Samoylov](http://mifjs.net)
+ 
+author: magmoro
+ 
+category: Effects
+ 
+tags: [image, zoom]
+ 
+sources:
+  - "Source/Looper.js"
+
+demo: http://mifjs.net/misc/looper/
+
+current: dev
+
+
