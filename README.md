@@ -4,7 +4,7 @@
 
 Louper
 ======
-Louper is simple and nice image zoom class which use real loop (not rectangle)
+Louper is simple and nice image zoom class which use real loupe (not rectangle)
 
 ![Screenshot](http://mifjs.net/assets/images/...........jpg)
 

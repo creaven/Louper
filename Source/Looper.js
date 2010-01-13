@@ -2,7 +2,7 @@
 ---
  
 name: Louper
-description: Class to zoom image using real loop
+description: Class to zoom image using real loupe
 license: MIT-Style License (http://mifjs.net/license.txt)
 copyright: Anton Samoylov (http://mifjs.net)
 authors: Anton Samoylov (http://mifjs.net)
