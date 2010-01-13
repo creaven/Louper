@@ -45,8 +45,24 @@ var Louper = new Class({
 	},
 	
 	prepareBig: function(){
-		this.context.drawImage(this.big, 0, 0);
-		this.canvas.inject(document.body);
+		this.canvas.inject(document.body).setStyles({
+			position: 'absolute',
+			left: 250,
+			top: 50
+		}).makeDraggable();
+		
+		
+		var context = this.context;
+		globalCompositeOperation = "source-in";
+		context.fillStyle = 'rgba(255,255,255,0)';
+		context.strokeStyle = 'rgb(255,255,255)';
+		context.beginPath();
+		context.arc(100, 100, 50, 0, Math.PI*2, true); 
+		context.closePath();
+		context.clip();
+		context.fillRect(0 , 0, 250, 50);
+		context.drawImage(this.big, 0, 0);
+		context.fill();
 	}
 	
 });
