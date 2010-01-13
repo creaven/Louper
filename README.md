@@ -2,15 +2,15 @@
 ===================
 
 
-Looper
+Louper
 ======
-Looper is simple and nice image zoom class which use real loop (not rectangle)
+Louper is simple and nice image zoom class which use real loop (not rectangle)
 
 ![Screenshot](http://mifjs.net/assets/images/...........jpg)
 
 How to use
 ----------
 
-[demo](http://mifjs.net/misc/looper/)
+[demo](http://mifjs.net/misc/louper/)
 
 ....
