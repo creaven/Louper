@@ -43,7 +43,6 @@ var Louper = new Class({
 		}else{
 			this.canvas = new Element('canvas', {width: radius*2, height: radius*2});
 			this.context = this.canvas.getContext("2d");
-			this.c = 0;
 		}
 		this.canvas.setStyles({
 			position: 'absolute'
@@ -166,6 +165,7 @@ var Louper = new Class({
 		var y = (pos.y - this.position.y) * this.bigSize.height / this.smallSize.height + loupeSize;
 		if(!Browser.Engine.trident){
 			var context = this.context;
+			context.save();
 			context.beginPath();
 			context.arc(radius, radius, radius, 0, Math.PI*2, true); 
 			context.closePath();
@@ -174,15 +174,7 @@ var Louper = new Class({
 			context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 			context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 			context.drawImage(this.big, -x, -y);
-			if(!Browser.Engine.gecko) return;
-			++this.c;
-			if(this.c == 250){
-				var css = this.canvas.style.cssText;
-				this.canvas = new Element('canvas', {width: this.canvas.width, height: this.canvas.height}).replaces(this.canvas);
-				this.canvas.style.cssText = css;
-				this.context = this.canvas.getContext("2d");
-				this.c = 0;
-			}
+			context.restore();
 		}else{
 			this.fill.position = -x/loupeSize + "," + -y/loupeSize;
 		}
