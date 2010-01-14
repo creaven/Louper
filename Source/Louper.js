@@ -63,7 +63,7 @@ var Louper = new Class({
 			width: this.small.offsetWidth,
 			height: this.small.offsetHeight,
 			position: 'relative',
-			overflow: 'hidden'
+			overflow: 'visible'
 		});
 		this.smallSize = {
 			width: this.small.width,
@@ -131,7 +131,6 @@ var Louper = new Class({
 		var context = this.context;
 		var radius = this.options.radius;
 		
-		
 		var current = {
 			left: this.canvas.getStyle('left').toInt(),
 			top: this.canvas.getStyle('top').toInt()
@@ -144,6 +143,7 @@ var Louper = new Class({
 			left: this.dstPos.x - this.position.x,
 			top: this.dstPos.y - this.position.y
 		});
+		context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		context.beginPath();
 		
 		context.arc(radius, radius, radius, 0, Math.PI*2, true); 
@@ -151,10 +151,7 @@ var Louper = new Class({
 		context.clip();
 		var x = dst.left + this.options.radius * 2;
 		var y = dst.top + this.options.radius * 2;
-		context.drawImage(this.big, 
-			x, y, this.bigSize.width, this.bigSize.height,
-			0, 0, this.bigSize.width, this.bigSize.height
-		);
+		context.drawImage(this.big, -x, -y);
 		context.fill();
 	}
 	
