@@ -26,6 +26,7 @@ var Louper = new Class({
 	initialize: function(element, options){
 		this.setOptions(options);
 		var radius = this.options.radius;
+		this.small = document.id(element);
 		var src = this.options.big || this.small.get('big');
 		if(Browser.Engine.trident){
 			if(!document.namespaces.v){
@@ -49,7 +50,6 @@ var Louper = new Class({
 			position: 'absolute',
 			cursor: 'move'
 		});
-		this.small = document.id(element);
 		this.big = new Element('img', {src: src}).setStyles({
 			position: 'absolute',
 			top: 0,
@@ -123,7 +123,9 @@ var Louper = new Class({
 			position: 'relative'
 		}).inject(this.wrapper);
 		this.loupeWrapper = new Element('div').setStyles({
-			position: 'absolute'
+			position: 'absolute',
+			top: 0,
+			left: 0
 		}).adopt(this.loupe).setStyles(this.options.start);
 		this.canvas.setStyles({
 			position: 'absolute',
@@ -150,7 +152,16 @@ var Louper = new Class({
 			mouseenter: this.showLoupe.bind(this),
 			mouseleave: this.hideLoupe.bind(this)
 		});
+		var delta = {
+			x: this.canvas.getStyle('left').toInt(),
+			y: this.canvas.getStyle('top').toInt()
+		}
+		var extra = this.options.radius*(1 - this.smallSize.width/this.bigSize.width/Math.sqrt(2))
 		this.loupeWrapper.makeDraggable({
+			limit: {
+				x: [0 - delta.x - extra, this.smallSize.width - delta.x + extra - this.canvas.width],
+				y: [0 - delta.y - extra, this.smallSize.height - delta.y + extra - this.canvas.width]
+			},
 			preventDefault: true,
 			onDrag: this.zoom.bind(this)
 		});
@@ -171,20 +182,22 @@ var Louper = new Class({
 		var radius = this.options.radius;
 		var loupeSize = this.options.radius * 2;
 		var pos = this.canvas.getPosition();
-		var x = (pos.x - this.position.x) * this.bigSize.width / this.smallSize.width + loupeSize;
-		var y = (pos.y - this.position.y) * this.bigSize.height / this.smallSize.height + loupeSize;
+		var x = (pos.x - this.position.x  + loupeSize/2) * this.bigSize.width / this.smallSize.width - loupeSize/2;
+		var y = (pos.y - this.position.y + loupeSize/2) * this.bigSize.height / this.smallSize.height - loupeSize/2;
 		if(!Browser.Engine.trident){
 			var context = this.context;
-			context.save();
-			context.beginPath();
-			context.arc(radius, radius, radius, 0, Math.PI*2, true); 
-			context.closePath();
-			context.clip();
-			context.fillStyle = 'rgb(255,255,255)';
-			context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-			context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-			context.drawImage(this.big, -x, -y);
-			context.restore();
+			try{
+				context.save();
+				context.beginPath();
+				context.arc(radius, radius, radius, 0, Math.PI*2, true); 
+				context.closePath();
+				context.clip();
+				context.fillStyle = 'rgb(255,255,255)';
+				context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+				context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+				context.drawImage(this.big, -x, -y);
+				context.restore();
+			}catch(e){};
 		}else{
 			this.fill.position = -x/loupeSize + "," + -y/loupeSize;
 		}

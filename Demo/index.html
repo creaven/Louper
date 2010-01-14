@@ -8,7 +8,6 @@
 		<script type="text/javascript" src="../Source/Louper.js"></script>
 		<script type="text/javascript">
 			window.addEvent('load', function(){
-				//new Louper('homer');
 				var loupe = {
 					src: 'loupe.png',
 					x: 101,
@@ -17,21 +16,33 @@
 				};
 				new Louper('girl', {
 					big: 'girl.jpg',
-					radius: 90,
+					radius: 40,
 					loupe: loupe,
 					onReady: function(){
 						this.loupeWrapper.setStyles({
 							left: this.smallSize.width - this.loupeSize.width,
-							top: this.smallSize.height - this.loupeSize.height + 20
+							top: this.smallSize.height - this.loupeSize.height + 30
 						});
 					}
 				});
+			
+				var loupe2 = {
+					src: 'loupe2.png',
+					x: 110,
+					y: 110,
+					radius: 105
+				}
+				new Louper('homer', {
+					radius: 40,
+					loupe: loupe2
+				});
+				
 			});
 		</script>
 	</head>
-	<body>
+	<body style="background:red">
 		<h2>Homer</h2>
-		<img src="gomer-small.jpg" id="homer" big="gomer.jpg"/>
+		<img src="gomer-small.jpg" id="homer" big="gomer.jpg" style="border:solid 1px black;margin:50px"/>
 		<br><br>
 		<h2>Queen</h2>
 		<img src="girl-thumb.jpg" id="girl" style="margin:30px;float:left"/>
