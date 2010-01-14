@@ -9,9 +9,16 @@
 		<script type="text/javascript">
 			window.addEvent('load', function(){
 				//new Louper('homer');
+				var loupe = {
+					src: 'loupe.png',
+					x: 101,
+					y: 102,
+					radius: 85
+				};
 				new Louper('girl', {
 					big: 'girl.jpg',
-					smooth: 10
+					radius: 40,
+					loupe: loupe
 				});
 			});
 		</script>

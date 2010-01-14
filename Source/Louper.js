@@ -32,7 +32,7 @@ var Louper = new Class({
 				document.createStyleSheet().cssText = "v\\:fill, v\\:oval{behavior:url(#default#VML);display:inline-block}";
 			}
 			var canvas = new Element('v:oval');
-			canvas.strokeweight = '0px';
+			canvas.stroked = false;
 			canvas.style.width = radius*2;
 			canvas.style.height = radius*2;
 			var fill = new Element('v:fill').inject(canvas);
@@ -43,21 +43,12 @@ var Louper = new Class({
 		}else{
 			this.canvas = new Element('canvas', {width: radius*2, height: radius*2});
 			this.context = this.canvas.getContext("2d");
+			this.context.fillStyle = 'rgba(255,255,255,0)';
 		}
 		this.canvas.setStyles({
-			position: 'absolute',
-			left: 0,
-			top: 0,
-			opacity: 1
+			position: 'absolute'
 		});
 		this.small = document.id(element);
-		if(!this.small.complete){
-			this.small.addEvent('load', function(){
-				this.prepareSmall();
-			}.bind(this));
-		}else{
-			this.prepareSmall();
-		}
 		this.big = new Element('img', {src: src}).setStyles({
 			position: 'absolute',
 			top: 0,
@@ -65,17 +56,30 @@ var Louper = new Class({
 			opacity: 0,
 			cursor: 'crosshair'
 		});
-		if(!this.big.complete){
-			this.big.addEvent('load', function(){
-				this.prepareBig();
-			}.bind(this));
-		}else{
-			this.prepareBig();
-		}
+		this.loupe = new Element('img', {src: this.options.loupe.src});
+		this.load([this.small, this.onSmallLoad], [this.big, this.onBigLoad], [this.loupe, this.onLoupeLoad]);
 		
 	},
 	
-	prepareSmall: function(){
+	load: function(){
+		var l = arguments.length;
+		var count = l;
+		for(var i = 0; i < l; i++){
+			var img = arguments[i][0];
+			var fun = arguments[i][1];
+			img.addEvent('load', function(){
+				if(arguments.callee.loaded) return;
+				arguments.callee.loaded = true;
+				var fun = arguments[0]
+				fun.call(this);
+				--count;
+				if(!count) this.ready();
+			}.bind(this, fun));
+			if(img.complete) img.fireEvent('load');
+		}
+	},
+	
+	onSmallLoad: function(){
 		this.wrapper = new Element('div', {'class': 'louper-wrapper'}).wraps(this.small).setStyles({
 			width: this.small.offsetWidth,
 			height: this.small.offsetHeight,
@@ -86,76 +90,64 @@ var Louper = new Class({
 			width: this.small.width,
 			height: this.small.height
 		};
-		if(this.bigPrepared){
-			this.ready();
-		}else{
-			this.smallPrepared = true;
-		}
 	},
 	
-	prepareBig: function(){
+	onBigLoad: function(){
 		this.bigSize = {
 			width: this.big.width,
 			height: this.big.height
 		};
-		if(this.smallPrepared){
-			this.ready();
-		}else{
-			this.bigPrepared = true;
-		}
+	},
+	
+	onLoupeLoad: function(){
+		var k = this.options.radius / this.options.loupe.radius;
+		this.loupe.setStyles({
+			width: this.loupe.width * k,
+			height: this.loupe.height * k,
+			position: 'relative'
+		}).inject(this.wrapper);
+		this.loupeWrapper = new Element('div', {'class': 'loupe-wrapper'}).setStyles({
+			position: 'absolute',
+			left: 0,
+			top: 0,
+			opacity: 0
+		}).adopt(this.loupe);
+		this.canvas.setStyles({
+			left: this.options.loupe.x * k - this.options.radius,
+			top: this.options.loupe.y * k - this.options.radius
+		})
 	},
 	
 	ready: function(){
-		this.canvas.inject(this.wrapper);
-		if(!Browser.Engine.trident){
-			globalCompositeOperation = "source-in";
-			this.context.fillStyle = 'rgba(255,255,255,0)';
-			this.context.strokeStyle = 'rgb(255,255,255)';		
-		}
+		this.canvas.inject(this.loupeWrapper, 'top');
+		this.loupeWrapper.inject(this.wrapper);
 		this.wrapper.addEvents({
-			mouseenter: this.startZoom.bind(this),
-			mouseleave: this.stopZoom.bind(this),
-			mousemove: this.move.bind(this)
+			mouseenter: this.showLoupe.bind(this),
+			mouseleave: this.hideLoupe.bind(this)
 		});
-		
+		this.loupeWrapper.makeDraggable({
+			preventDefault: true,
+			onDrag: this.zoom.bind(this)
+		});
 	},
 	
-	move: function(event){
-		if(!this.position) return;
-		this.dstPos = event.page;
-		this.zoom()
-	},
-	
-	startZoom: function(){
+	showLoupe: function(){
 		this.position = this.wrapper.getPosition();
-		//this.timer = this.zoom.periodical(10, this);
-		//this.big.fade('in');
+		this.loupeWrapper.fade('in');
 	},
 	
-	stopZoom: function(){
-		//$clear(this.timer);
-		//this.big.fade('out');
+	hideLoupe: function(){
+		this.loupeWrapper.fade('out');
 	},
 	
 	zoom: function(){
 		var radius = this.options.radius;
-		
-		var current = {
-			left: this.canvas.getStyle('left').toInt(),
-			top: this.canvas.getStyle('top').toInt()
-		};
-		var dst = {
-			left:  parseInt((this.dstPos.x - this.position.x) * (this.bigSize.width/this.smallSize.width)),
-			top:  parseInt((this.dstPos.y - this.position.y) * (this.bigSize.height/this.smallSize.height))
-		};
-		this.canvas.setStyles({
-			left: this.dstPos.x - this.position.x,
-			top: this.dstPos.y - this.position.y
-		});
 		var loupeSize = this.options.radius * 2;
-		var x = dst.left + loupeSize;
-		var y = dst.top + loupeSize;
+		var pos = this.canvas.getPosition();
+		var x = (pos.x - this.position.x) * this.bigSize.width / this.smallSize.width + loupeSize;
+		var y = (pos.y - this.position.y) * this.bigSize.height / this.smallSize.height + loupeSize;
 		if(!Browser.Engine.trident){
+			globalCompositeOperation = "source-in";
 			var context = this.context;
 			context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 			context.beginPath();
