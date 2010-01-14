@@ -53,7 +53,6 @@ var Louper = new Class({
 			position: 'absolute',
 			top: 0,
 			left: 0,
-			opacity: 0,
 			cursor: 'crosshair'
 		});
 		this.loupe = new Element('img', {src: this.options.loupe.src});
@@ -70,7 +69,7 @@ var Louper = new Class({
 			img.addEvent('load', function(){
 				if(arguments.callee.loaded) return;
 				arguments.callee.loaded = true;
-				var fun = arguments[0]
+				var fun = arguments[0];
 				fun.call(this);
 				--count;
 				if(!count) this.ready();
@@ -101,26 +100,39 @@ var Louper = new Class({
 	
 	onLoupeLoad: function(){
 		var k = this.options.radius / this.options.loupe.radius;
+		var width = this.loupe.width * k;
+		var height = this.loupe.height * k;
 		this.loupe.setStyles({
-			width: this.loupe.width * k,
-			height: this.loupe.height * k,
+			width: width,
+			height: height,
 			position: 'relative'
 		}).inject(this.wrapper);
 		this.loupeWrapper = new Element('div', {'class': 'loupe-wrapper'}).setStyles({
 			position: 'absolute',
 			left: 0,
-			top: 0,
-			opacity: 0
+			top: 0
 		}).adopt(this.loupe);
 		this.canvas.setStyles({
+			position: 'absolute',
 			left: this.options.loupe.x * k - this.options.radius,
 			top: this.options.loupe.y * k - this.options.radius
-		})
+		});
+		if(Browser.Engine.trident){
+			var src = this.loupe.src;
+			this.loupe = new Element('div').replaces(this.loupe).setStyles({
+				width: width,
+				height: height,
+				position: 'relative'
+			});
+			this.loupe.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + src + "',sizingMethod='scale')";
+			this.loupe.style.background = 'none';
+		}
 	},
 	
 	ready: function(){
-		this.canvas.inject(this.loupeWrapper, 'top');
 		this.loupeWrapper.inject(this.wrapper);
+		this.canvas.inject(this.loupeWrapper);
+		this.loupeWrapper.setStyle('opacity', 0)
 		this.wrapper.addEvents({
 			mouseenter: this.showLoupe.bind(this),
 			mouseleave: this.hideLoupe.bind(this)
