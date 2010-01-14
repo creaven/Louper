@@ -19,7 +19,8 @@ var Louper = new Class({
 	Implements: [Options, Events],
 	
 	options: {
-		radius: 40
+		radius: 40,
+		start: 'bottom right'
 	},
 	
 	initialize: function(element, options){
@@ -86,6 +87,13 @@ var Louper = new Class({
 		}).addEvent('mousedown', function(event){
 			event.preventDefault();
 		});
+		['margin', 'left', 'top', 'bottom', 'right', 'float', 'clear'].each(function(p){
+			var style = this.small.getStyle(p);
+			var dflt = 'auto';
+			if(p == 'float' || p == 'clear') dflt = 'none';
+			this.small.setStyle(p, dflt);
+			this.wrapper.setStyle(p, style);
+		}, this);
 		this.smallSize = {
 			width: this.small.width,
 			height: this.small.height
