@@ -79,7 +79,7 @@ var Louper = new Class({
 	},
 	
 	onSmallLoad: function(){
-		this.wrapper = new Element('div', {'class': 'louper-wrapper'}).wraps(this.small).setStyles({
+		this.wrapper = new Element('div').wraps(this.small).setStyles({
 			width: this.small.offsetWidth,
 			height: this.small.offsetHeight,
 			position: 'relative',
@@ -120,7 +120,7 @@ var Louper = new Class({
 			height: height,
 			position: 'relative'
 		}).inject(this.wrapper);
-		this.loupeWrapper = new Element('div', {'class': 'loupe-wrapper'}).setStyles({
+		this.loupeWrapper = new Element('div').setStyles({
 			position: 'absolute'
 		}).adopt(this.loupe).setStyles(this.options.start);
 		this.canvas.setStyles({
@@ -133,7 +133,8 @@ var Louper = new Class({
 			this.loupe = new Element('div').replaces(this.loupe).setStyles({
 				width: width,
 				height: height,
-				position: 'relative'
+				position: 'relative',
+				cursor: 'pointer'
 			});
 			this.loupe.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + src + "',sizingMethod='scale')";
 			this.loupe.style.background = 'none';
