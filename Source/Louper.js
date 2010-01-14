@@ -46,16 +46,18 @@ var Louper = new Class({
 			this.context = this.canvas.getContext("2d");
 		}
 		this.canvas.setStyles({
-			position: 'absolute'
+			position: 'absolute',
+			cursor: 'move'
 		});
 		this.small = document.id(element);
 		this.big = new Element('img', {src: src}).setStyles({
 			position: 'absolute',
 			top: 0,
-			left: 0,
-			cursor: 'crosshair'
+			left: 0
 		});
-		this.loupe = new Element('img', {src: this.options.loupe.src});
+		this.loupe = new Element('img', {src: this.options.loupe.src}).setStyles({
+			cursor: 'move'
+		});
 		this.load([this.small, this.onSmallLoad], [this.big, this.onBigLoad], [this.loupe, this.onLoupeLoad]);
 		
 	},
@@ -133,8 +135,7 @@ var Louper = new Class({
 			this.loupe = new Element('div').replaces(this.loupe).setStyles({
 				width: width,
 				height: height,
-				position: 'relative',
-				cursor: 'pointer'
+				position: 'relative'
 			});
 			this.loupe.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + src + "',sizingMethod='scale')";
 			this.loupe.style.background = 'none';
