@@ -108,10 +108,9 @@ var Louper = new Class({
 	ready: function(){
 		this.canvas.inject(this.wrapper);
 		if(!Browser.Engine.trident){
-			var context = this.context;
 			globalCompositeOperation = "source-in";
-			context.fillStyle = 'rgba(255,255,255,0)';
-			context.strokeStyle = 'rgb(255,255,255)';		
+			this.context.fillStyle = 'rgba(255,255,255,0)';
+			this.context.strokeStyle = 'rgb(255,255,255)';		
 		}
 		this.wrapper.addEvents({
 			mouseenter: this.startZoom.bind(this),
