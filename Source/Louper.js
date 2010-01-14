@@ -89,12 +89,14 @@ var Louper = new Class({
 		}).addEvent('mousedown', function(event){
 			event.preventDefault();
 		});
-		['margin', 'left', 'top', 'bottom', 'right', 'float', 'clear'].each(function(p){
+		['margin', 'left', 'top', 'bottom', 'right', 'float', 'clear', 'border'].each(function(p){
 			var style = this.small.getStyle(p);
 			var dflt = 'auto';
-			if(p == 'float' || p == 'clear') dflt = 'none';
-			this.small.setStyle(p, dflt);
-			this.wrapper.setStyle(p, style);
+			if(['float', 'clear', 'border'].contains(p)) dflt = 'none';
+			try{
+				this.small.setStyle(p, dflt);
+				this.wrapper.setStyle(p, style);
+			}catch(e){};
 		}, this);
 		this.smallSize = {
 			width: this.small.width,
@@ -156,11 +158,12 @@ var Louper = new Class({
 			x: this.canvas.getStyle('left').toInt(),
 			y: this.canvas.getStyle('top').toInt()
 		}
-		var extra = this.options.radius*(1 - this.smallSize.width/this.bigSize.width/Math.sqrt(2))
+		var extra = this.options.radius*(1 - this.smallSize.width/this.bigSize.width/Math.sqrt(2));
+		
 		this.loupeWrapper.makeDraggable({
 			limit: {
-				x: [0 - delta.x - extra, this.smallSize.width - delta.x + extra - this.canvas.width],
-				y: [0 - delta.y - extra, this.smallSize.height - delta.y + extra - this.canvas.width]
+				x: [0 - delta.x - extra, this.smallSize.width - delta.x + extra - 2*this.options.radius],
+				y: [0 - delta.y - extra, this.smallSize.height - delta.y + extra - 2*this.options.radius]
 			},
 			preventDefault: true,
 			onDrag: this.zoom.bind(this)
