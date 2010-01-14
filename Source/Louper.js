@@ -181,7 +181,6 @@ var Louper = new Class({
 				this.canvas = new Element('canvas', {width: this.canvas.width, height: this.canvas.height}).replaces(this.canvas);
 				this.canvas.style.cssText = css;
 				this.context = this.canvas.getContext("2d");
-				this.context.fillStyle = 'rgba(255,255,255,0)';
 				this.c = 0;
 			}
 		}else{
