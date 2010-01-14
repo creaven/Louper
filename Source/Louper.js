@@ -84,6 +84,8 @@ var Louper = new Class({
 			height: this.small.offsetHeight,
 			position: 'relative',
 			overflow: 'visible'
+		}).addEvent('mousedown', function(event){
+			event.preventDefault();
 		});
 		this.smallSize = {
 			width: this.small.width,
