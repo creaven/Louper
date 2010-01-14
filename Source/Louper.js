@@ -25,13 +25,31 @@ var Louper = new Class({
 	initialize: function(element, options){
 		this.setOptions(options);
 		var radius = this.options.radius;
-		this.canvas = new Element('canvas', {width: radius*2, height: radius*2}).setStyles({
+		var src = this.options.big || this.small.get('big');
+		if(Browser.Engine.trident){
+			if(!document.namespaces.v){
+				document.namespaces.add("v", "urn:schemas-microsoft-com:vml");
+				document.createStyleSheet().cssText = "v\\:fill, v\\:oval{behavior:url(#default#VML);display:inline-block}";
+			}
+			var canvas = new Element('v:oval');
+			canvas.strokeweight = '0px';
+			canvas.style.width = radius*2;
+			canvas.style.height = radius*2;
+			var fill = new Element('v:fill').inject(canvas);
+			fill.type = 'tile';
+			fill.src = src;
+			this.canvas = canvas;
+			this.fill = fill;
+		}else{
+			this.canvas = new Element('canvas', {width: radius*2, height: radius*2});
+			this.context = this.canvas.getContext("2d");
+		}
+		this.canvas.setStyles({
 			position: 'absolute',
 			left: 0,
 			top: 0,
 			opacity: 1
 		});
-		this.context = this.canvas.getContext("2d");
 		this.small = document.id(element);
 		if(!this.small.complete){
 			this.small.addEvent('load', function(){
@@ -40,7 +58,6 @@ var Louper = new Class({
 		}else{
 			this.prepareSmall();
 		}
-		var src = this.options.big || this.small.get('big');
 		this.big = new Element('img', {src: src}).setStyles({
 			position: 'absolute',
 			top: 0,
@@ -59,7 +76,7 @@ var Louper = new Class({
 	},
 	
 	prepareSmall: function(){
-		this.wrapper = new Element('div', {'class': 'looper-wrapper'}).wraps(this.small).setStyles({
+		this.wrapper = new Element('div', {'class': 'loupeer-wrapper'}).wraps(this.small).setStyles({
 			width: this.small.offsetWidth,
 			height: this.small.offsetHeight,
 			position: 'relative',
@@ -90,19 +107,12 @@ var Louper = new Class({
 	
 	ready: function(){
 		this.canvas.inject(this.wrapper);
-		var context = this.context;
-		globalCompositeOperation = "source-in";
-		context.fillStyle = 'rgba(255,255,255,0)';
-		context.strokeStyle = 'rgb(255,255,255)';
-		context.beginPath();
-		var radius = this.options.radius;
-		context.arc(radius, radius, radius, 0, Math.PI*2, true); 
-		context.closePath();
-		context.clip();
-		context.drawImage(this.big, 0, 0);
-		context.fill();
-		
-		
+		if(!Browser.Engine.trident){
+			var context = this.context;
+			globalCompositeOperation = "source-in";
+			context.fillStyle = 'rgba(255,255,255,0)';
+			context.strokeStyle = 'rgb(255,255,255)';		
+		}
 		this.wrapper.addEvents({
 			mouseenter: this.startZoom.bind(this),
 			mouseleave: this.stopZoom.bind(this),
@@ -112,6 +122,7 @@ var Louper = new Class({
 	},
 	
 	move: function(event){
+		if(!this.position) return;
 		this.dstPos = event.page;
 		this.zoom()
 	},
@@ -128,7 +139,6 @@ var Louper = new Class({
 	},
 	
 	zoom: function(){
-		var context = this.context;
 		var radius = this.options.radius;
 		
 		var current = {
@@ -143,16 +153,21 @@ var Louper = new Class({
 			left: this.dstPos.x - this.position.x,
 			top: this.dstPos.y - this.position.y
 		});
-		context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		context.beginPath();
-		
-		context.arc(radius, radius, radius, 0, Math.PI*2, true); 
-		context.closePath();
-		context.clip();
-		var x = dst.left + this.options.radius * 2;
-		var y = dst.top + this.options.radius * 2;
-		context.drawImage(this.big, -x, -y);
-		context.fill();
+		var loupeSize = this.options.radius * 2;
+		var x = dst.left + loupeSize;
+		var y = dst.top + loupeSize;
+		if(!Browser.Engine.trident){
+			var context = this.context;
+			context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+			context.beginPath();
+			context.arc(radius, radius, radius, 0, Math.PI*2, true); 
+			context.closePath();
+			context.clip();
+			context.drawImage(this.big, -x, -y);
+			context.fill();
+		}else{
+			this.fill.position = -x/loupeSize + "," + -y/loupeSize;
+		}
 	}
 	
 });
