@@ -16,7 +16,7 @@ var Louper = new Class({
 	
 	version: 'dev',
 	
-	Implements: [Options],
+	Implements: [Options, Events],
 	
 	options: {
 		radius: 40
@@ -102,16 +102,18 @@ var Louper = new Class({
 		var k = this.options.radius / this.options.loupe.radius;
 		var width = this.loupe.width * k;
 		var height = this.loupe.height * k;
+		this.loupeSize = {
+			width: width,
+			height: height
+		};
 		this.loupe.setStyles({
 			width: width,
 			height: height,
 			position: 'relative'
 		}).inject(this.wrapper);
 		this.loupeWrapper = new Element('div', {'class': 'loupe-wrapper'}).setStyles({
-			position: 'absolute',
-			left: 0,
-			top: 0
-		}).adopt(this.loupe);
+			position: 'absolute'
+		}).adopt(this.loupe).setStyles(this.options.start);
 		this.canvas.setStyles({
 			position: 'absolute',
 			left: this.options.loupe.x * k - this.options.radius,
@@ -141,6 +143,7 @@ var Louper = new Class({
 			preventDefault: true,
 			onDrag: this.zoom.bind(this)
 		});
+		this.fireEvent('ready');
 	},
 	
 	showLoupe: function(){

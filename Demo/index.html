@@ -17,8 +17,14 @@
 				};
 				new Louper('girl', {
 					big: 'girl.jpg',
-					radius: 40,
-					loupe: loupe
+					radius: 20,
+					loupe: loupe,
+					onReady: function(){
+						this.loupeWrapper.setStyles({
+							left: this.smallSize.width - this.loupeSize.width,
+							top: this.smallSize.height - this.loupeSize.height + 20
+						})
+					}
 				});
 			});
 		</script>
