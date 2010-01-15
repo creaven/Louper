@@ -19,8 +19,7 @@ var Louper = new Class({
 	Implements: [Options, Events],
 	
 	options: {
-		radius: 40,
-		start: 'bottom right'
+		radius: 40
 	},
 	
 	initialize: function(element, options){
@@ -129,7 +128,7 @@ var Louper = new Class({
 			position: 'absolute',
 			top: 0,
 			left: 0
-		}).adopt(this.loupe).setStyles(this.options.start);
+		}).adopt(this.loupe);
 		this.canvas.setStyles({
 			position: 'absolute',
 			left: this.options.loupe.x * k - this.options.radius,
