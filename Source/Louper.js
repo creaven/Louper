@@ -121,8 +121,8 @@ var Louper = new Class({
 		this.loupe.setStyles({
 			width: width,
 			height: height,
-			position: 'absolute',
-			zIndex: 1
+			position: 'relative',
+			zIndex: 2
 		}).inject(this.wrapper);
 		this.loupeWrapper = new Element('div').setStyles({
 			position: 'absolute',
@@ -139,7 +139,8 @@ var Louper = new Class({
 			this.loupe = new Element('div').replaces(this.loupe).setStyles({
 				width: width,
 				height: height,
-				position: 'relative'
+				position: 'relative',
+				zIndex: 1
 			});
 			this.loupe.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + src + "',sizingMethod='scale')";
 			this.loupe.style.background = 'none';
@@ -182,7 +183,7 @@ var Louper = new Class({
 	
 	zoom: function(){
 		var radius = this.options.radius;
-		var loupeSize = this.options.radius * 2;
+		var loupeSize = radius * 2;
 		var pos = this.canvas.getPosition();
 		var x = (pos.x - this.position.x  + loupeSize/2) * this.bigSize.width / this.smallSize.width - loupeSize/2;
 		var y = (pos.y - this.position.y + loupeSize/2) * this.bigSize.height / this.smallSize.height - loupeSize/2;
@@ -205,7 +206,7 @@ var Louper = new Class({
 			this.fill.position = -x/loupeSize + "," + -y/loupeSize;
 			this.fill.inject(this.canvas);
 		};
-		var extra = this.options.radius *(1 - this.smallSize.width/this.bigSize.width)/Math.sqrt(2);
+		var extra = radius*(1 - this.smallSize.width/this.bigSize.width)/Math.sqrt(2);
 		var limit = {
 			left: this.position.x - extra,
 			right: this.position.x + this.smallSize.width + extra,
@@ -219,11 +220,7 @@ var Louper = new Class({
 				coords[side] = -coords[side];
 				limit[side] = -limit[side]
 			};
-			if(coords[side] > limit[side]){
-				clip[side] = Math.ceil(coords[side] - limit[side]);
-			}else{
-				clip[side] = 'auto';
-			};
+			clip[side] = coords[side] > limit[side] ? Math.ceil(coords[side] - limit[side]) : 'auto';
 		});
 		this.canvas.setStyle('clip', 'rect(' + 
 			(clip.top != 'auto' ? clip.top + 'px' : 'auto') + ' ' + 
