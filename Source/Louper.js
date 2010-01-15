@@ -14,7 +14,7 @@ provides: Louper
 
 var Louper = new Class({
 	
-	version: '1.0',
+	version: '1.1',
 	
 	Implements: [Options, Events],
 	
