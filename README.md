@@ -9,6 +9,17 @@ How to use
 
 [demo](http://mifjs.net/misc/louper/Demo/)
 
+![docs](http://mifjs.net/misc/louper/Demo/loupe.jpg)
+
+options:
+
+* **big** - big image src
+* **radius**(integer) - loupe radius
+* **loupe** - loupe object {src: src, x: x, y: y, radius: radius} contains info about loupe image - image src, circle coords and radius
+
+events:
+
+* **ready** - fires on images load
 
 
 Example1:
