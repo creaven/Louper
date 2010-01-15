@@ -13,7 +13,7 @@ How to use
 
 options:
 
-* **big** - big image src
+* **big** - big image src (you can be used img big attribute instead if you want)
 * **radius**(integer) - loupe radius
 * **loupe** - loupe object {src: src, x: x, y: y, radius: radius} contains info about loupe image - image src, circle coords and radius
 
