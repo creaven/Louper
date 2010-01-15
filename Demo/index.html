@@ -16,7 +16,7 @@
 				};
 				new Louper('girl', {
 					big: 'girl.jpg',
-					radius: 40,
+					radius: 100,
 					loupe: loupe,
 					onReady: function(){
 						this.loupeWrapper.setStyles({
@@ -28,23 +28,31 @@
 			
 				var loupe2 = {
 					src: 'loupe2.png',
-					x: 110,
-					y: 110,
-					radius: 105
+					x: 111,
+					y: 109,
+					radius: 103
 				}
 				new Louper('homer', {
-					radius: 30,
-					loupe: loupe2
+					radius: 60,
+					loupe: loupe
+				});
+				
+				
+				new Louper('brain', {
+					loupe: loupe2,
+					radius: 100
 				});
 				
 			});
 		</script>
 	</head>
-	<body>
+	<body style="background:red">
 		<h2>Homer</h2>
-		<img src="gomer-small.jpg" id="homer" big="gomer.jpg" style="border:solid 1px black;margin:50px"/>
+		<img src="gomer-small.jpg" id="homer" big="gomer.jpg" style="margin:50px"/>
 		<br><br>
 		<h2>Queen</h2>
-		<img src="girl-thumb.jpg" id="girl" style="margin:30px;float:left"/>
+		<img src="girl-thumb.jpg" id="girl" style="margin:70px"/>
+		<H2>Homer Brain (original &mdash; <a href="http://www.netzgesta.de/loupe/homer.html">http://www.netzgesta.de/loupe/homer.html</a>)</H2>
+		<img src="small.jpg" id="brain" big="big.jpg" style="margin:50px;float:left"/>
 	</body>
 </html>

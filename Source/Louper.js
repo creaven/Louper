@@ -122,7 +122,8 @@ var Louper = new Class({
 		this.loupe.setStyles({
 			width: width,
 			height: height,
-			position: 'relative'
+			position: 'absolute',
+			zIndex: 1
 		}).inject(this.wrapper);
 		this.loupeWrapper = new Element('div').setStyles({
 			position: 'absolute',
@@ -159,11 +160,10 @@ var Louper = new Class({
 			y: this.canvas.getStyle('top').toInt()
 		}
 		var extra = this.options.radius*(1 - this.smallSize.width/this.bigSize.width/Math.sqrt(2));
-		
 		this.loupeWrapper.makeDraggable({
 			limit: {
-				x: [0 - delta.x - extra, this.smallSize.width - delta.x + extra - 2*this.options.radius],
-				y: [0 - delta.y - extra, this.smallSize.height - delta.y + extra - 2*this.options.radius]
+				x: [Math.round(0 - delta.x - extra), Math.round(this.smallSize.width - delta.x + extra - 2*this.options.radius)],
+				y: [Math.round(0 - delta.y - extra), Math.round(this.smallSize.height - delta.y + extra - 2*this.options.radius)]
 			},
 			preventDefault: true,
 			onDrag: this.zoom.bind(this)
@@ -172,7 +172,7 @@ var Louper = new Class({
 	},
 	
 	showLoupe: function(){
-		this.position = this.wrapper.getPosition();
+		this.position = this.small.getPosition();
 		this.zoom();
 		this.loupeWrapper.fade('in');
 	},
@@ -202,8 +202,36 @@ var Louper = new Class({
 				context.restore();
 			}catch(e){};
 		}else{
+			this.fill.dispose();
 			this.fill.position = -x/loupeSize + "," + -y/loupeSize;
-		}
+			this.fill.inject(this.canvas);
+		};
+		var extra = this.options.radius *(1 - this.smallSize.width/this.bigSize.width)/Math.sqrt(2);
+		var limit = {
+			left: this.position.x - extra,
+			right: this.position.x + this.smallSize.width + extra,
+			top: this.position.y - extra,
+			bottom: this.position.y + this.smallSize.height + extra
+		};
+		var coords = this.canvas.getCoordinates();
+		var clip = {};
+		['left', 'right', 'top', 'bottom'].each(function(side){
+			if(side == 'left' || side == 'top'){
+				coords[side] = -coords[side];
+				limit[side] = -limit[side]
+			};
+			if(coords[side] > limit[side]){
+				clip[side] = Math.ceil(coords[side] - limit[side]);
+			}else{
+				clip[side] = 'auto';
+			};
+		});
+		this.canvas.setStyle('clip', 'rect(' + 
+			(clip.top != 'auto' ? clip.top + 'px' : 'auto') + ' ' + 
+			(clip.right != 'auto' ? (loupeSize - clip.right) + 'px' : 'auto') + ' ' + 
+			(clip.bottom != 'auto' ? (loupeSize - clip.bottom) + 'px' : 'auto') + ' ' + 
+			(clip.left != 'auto' ? clip.left + 'px' : 'auto') + 
+		')');
 	}
 	
 });
