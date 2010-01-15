@@ -9,35 +9,33 @@
 		<script type="text/javascript">
 			window.addEvent('load', function(){
 				var loupe = {
-					src: 'loupe.png',
+					src: 'loupe.png', //image from http://img.artlebedev.ru/studio/us/2009/loup.png
 					x: 101,
 					y: 102,
 					radius: 85
 				};
 				new Louper('girl', {
 					big: 'girl.jpg',
-					radius: 100,
+					radius: 80,
 					loupe: loupe,
 					onReady: function(){
 						this.loupeWrapper.setStyles({
-							left: this.smallSize.width - this.loupeSize.width,
-							top: this.smallSize.height - this.loupeSize.height + 30
+							left: this.smallSize.width - this.loupeSize.width + 60,
+							top: this.smallSize.height - this.loupeSize.height + 120
 						});
 					}
 				});
 			
 				var loupe2 = {
-					src: 'loupe2.png',
+					src: 'loupe2.png',//image from http://www.netzgesta.de/loupe/
 					x: 111,
 					y: 109,
 					radius: 103
 				}
 				new Louper('homer', {
-					radius: 60,
+					radius: 30,
 					loupe: loupe
 				});
-				
-				
 				new Louper('brain', {
 					loupe: loupe2,
 					radius: 100
@@ -46,13 +44,22 @@
 			});
 		</script>
 	</head>
-	<body style="background:red">
+	<body>
 		<h2>Homer</h2>
+		
 		<img src="gomer-small.jpg" id="homer" big="gomer.jpg" style="margin:50px"/>
-		<br><br>
+		
+		<hr>
 		<h2>Queen</h2>
+		
 		<img src="girl-thumb.jpg" id="girl" style="margin:70px"/>
-		<H2>Homer Brain (original &mdash; <a href="http://www.netzgesta.de/loupe/homer.html">http://www.netzgesta.de/loupe/homer.html</a>)</H2>
+		
+		<hr>
+		<H2>
+			Homer Brain (original &mdash; <a href="http://www.netzgesta.de/loupe/homer.html"> http://www.netzgesta.de/loupe/homer.html </a>)
+		</H2>
+		
 		<img src="small.jpg" id="brain" big="big.jpg" style="margin:50px;float:left"/>
+		
 	</body>
 </html>
