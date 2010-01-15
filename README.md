@@ -63,7 +63,7 @@ html:
 	
 js:
 
-	var loupe2 = {
+	var loupe2 = {//loupe image circle coords and radius
 		src: 'loupe2.png',//image from http://www.netzgesta.de/loupe/
 		x: 111,
 		y: 109,
