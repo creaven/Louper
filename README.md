@@ -20,7 +20,7 @@ html:
 js:
 
 	var loupe = {
-		src: 'loupe2.png',//image from http://www.netzgesta.de/loupe/
+		src: 'loupe2.png',
 		x: 111,
 		y: 109,
 		radius: 103
@@ -42,7 +42,7 @@ js:
 		big: 'girl.jpg',
 		radius: 80,
 		loupe: {
-			src: 'loupe.png', //image from http://img.artlebedev.ru/studio/us/2009/loup.png
+			src: 'loupe.png',
 			x: 101,
 			y: 102,
 			radius: 85
@@ -64,7 +64,7 @@ html:
 js:
 
 	var loupe2 = {//loupe image circle coords and radius
-		src: 'loupe2.png',//image from http://www.netzgesta.de/loupe/
+		src: 'loupe2.png',
 		x: 111,
 		y: 109,
 		radius: 103
