@@ -26,10 +26,12 @@ Example1:
 
 html:
 
+	#html
 	<img src="gomer-small.jpg" id="homer" big="gomer.jpg"/>
 	
 js:
 
+	#js
 	var loupe = {
 		src: 'loupe2.png',
 		x: 111,
@@ -45,10 +47,12 @@ Example2:
 
 html:
 
+	#html
 	<img src="girl-thumb.jpg" id="girl"/>
 
 js:
 
+	#js
 	new Louper('girl', {
 		big: 'girl.jpg',
 		radius: 80,
@@ -70,10 +74,12 @@ Example3:
 	
 html:
 
+	#html
 	<img src="small.jpg" id="brain" big="big.jpg"/>
 	
 js:
 
+	#js
 	var loupe2 = {//loupe image circle coords and radius
 		src: 'loupe2.png',
 		x: 111,
